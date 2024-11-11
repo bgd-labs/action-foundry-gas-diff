@@ -1,5 +1,5 @@
 {
-  "name": "action-foundry-gas-diff",
+  "name": "@bgd-labs/foundry-gas-diff",
   "version": "1.0.0",
   "description": "Creates a gas diff between two gas outputs",
   "files": [
@@ -34,6 +34,7 @@
     "@actions/core": "^1.11.1",
     "@types/node": "^22.9.0",
     "tsup": "^8.3.5",
+    "typescript": "^5.6.3",
     "vitest": "^2.1.4"
   },
   "tsup": {
