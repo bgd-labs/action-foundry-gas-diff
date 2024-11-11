@@ -1,0 +1,137 @@
+[
+  {
+    "contract": "src/contracts/create3/Create3Factory.sol:Create3Factory",
+    "deployment": { "gas": 224263, "size": 1151 },
+    "functions": {
+      "create(bytes32,bytes)": {
+        "calls": 6,
+        "min": 296388,
+        "mean": 296666,
+        "median": 287062,
+        "max": 297068
+      },
+      "predictAddress(address,bytes32)": {
+        "calls": 6,
+        "min": 1024,
+        "mean": 1024,
+        "median": 1024,
+        "max": 1024
+      }
+    }
+  },
+  {
+    "contract": "src/contracts/transparent-proxy/ProxyAdmin.sol:ProxyAdmin",
+    "deployment": { "gas": 0, "size": 0 },
+    "functions": {
+      "owner()": {
+        "calls": 6,
+        "min": 386,
+        "mean": 386,
+        "median": 386,
+        "max": 386
+      }
+    }
+  },
+  {
+    "contract": "src/contracts/transparent-proxy/TransparentProxyFactory.sol:TransparentProxyFactory",
+    "deployment": { "gas": 1609662, "size": 7244 },
+    "functions": {
+      "createDeterministic(address,address,bytes,bytes32)": {
+        "calls": 6,
+        "min": 574115,
+        "mean": 534507,
+        "median": 574589,
+        "max": 574703
+      },
+      "createDeterministicProxyAdmin(address,bytes32)": {
+        "calls": 6,
+        "min": 421268,
+        "mean": 421658,
+        "median": 421850,
+        "max": 421856
+      },
+      "predictCreateDeterministic(address,address,bytes,bytes32)": {
+        "calls": 6,
+        "min": 12057,
+        "mean": 12057,
+        "median": 12057,
+        "max": 12057
+      },
+      "predictCreateDeterministicProxyAdmin(bytes32)": {
+        "calls": 6,
+        "min": 6236,
+        "mean": 6236,
+        "median": 6236,
+        "max": 6236
+      }
+    }
+  },
+  {
+    "contract": "src/contracts/transparent-proxy/TransparentUpgradeableProxy.sol:TransparentUpgradeableProxy",
+    "deployment": { "gas": 0, "size": 0 },
+    "functions": {
+      "getFoo()": {
+        "calls": 6,
+        "min": 1042,
+        "mean": 1042,
+        "median": 1042,
+        "max": 1042
+      }
+    }
+  },
+  {
+    "contract": "test/OwnableWithGuardian.t.sol:ImplOwnableWithGuardian",
+    "deployment": { "gas": 285211, "size": 1067 },
+    "functions": {
+      "guardian()": {
+        "calls": 1,
+        "min": 2286,
+        "mean": 2286,
+        "median": 2286,
+        "max": 2286
+      },
+      "owner()": {
+        "calls": 1,
+        "min": 2341,
+        "mean": 2341,
+        "median": 2341,
+        "max": 2341
+      },
+      "updateGuardian(address)": {
+        "calls": 6,
+        "min": 25944,
+        "mean": 28245,
+        "median": 28283,
+        "max": 30394
+      }
+    }
+  },
+  {
+    "contract": "test/PermissionlessRescuable.t.sol:TestPermissionlessRescuable",
+    "deployment": { "gas": 879072, "size": 4033 },
+    "functions": {
+      "emergencyEtherTransfer(uint256)": {
+        "calls": 2,
+        "min": 59057,
+        "mean": 59900,
+        "median": 59900,
+        "max": 60743
+      },
+      "emergencyTokenTransfer(address,uint256)": {
+        "calls": 4,
+        "min": 34213,
+        "mean": 50627,
+        "median": 51185,
+        "max": 65925
+      },
+      "receive()": { "calls": 1, "min": 0, "mean": 0, "median": 0, "max": 0 },
+      "whoShouldReceiveFunds()": {
+        "calls": 1,
+        "min": 2566,
+        "mean": 2566,
+        "median": 2566,
+        "max": 2566
+      }
+    }
+  }
+]

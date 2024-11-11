@@ -1,0 +1,53 @@
+{
+  "name": "action-foundry-gas-diff",
+  "version": "1.0.0",
+  "description": "Creates a gas diff between two gas outputs",
+  "files": [
+    "src/lib.ts",
+    "dist/lib.d.mts",
+    "dist/lib.d.ts",
+    "dist/lib.js",
+    "dist/lib.mjs"
+  ],
+  "main": "./dist/lib.js",
+  "module": "./dist/lib.mjs",
+  "types": "./dist/lib.d.ts",
+  "exports": {
+    ".": {
+      "require": {
+        "types": "./dist/lib.d.mts",
+        "default": "./dist/lib.js"
+      },
+      "import": {
+        "types": "./dist/lib.d.mts",
+        "default": "./dist/lib.mjs"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "test": "vitest"
+  },
+  "author": "BGD labs",
+  "license": "MIT",
+  "devDependencies": {
+    "@actions/core": "^1.11.1",
+    "@types/node": "^22.9.0",
+    "tsup": "^8.3.5",
+    "vitest": "^2.1.4"
+  },
+  "tsup": {
+    "entry": [
+      "src/action.ts",
+      "src/lib.ts"
+    ],
+    "splitting": false,
+    "sourcemap": false,
+    "clean": true,
+    "dts": true,
+    "format": [
+      "esm",
+      "cjs"
+    ]
+  }
+}

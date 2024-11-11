@@ -1,0 +1,14 @@
+name: "foundry-gas-report"
+description: "Generates a html gas report diffing two json gas-report files"
+inputs:
+  ROOT_REPORT_PATH:
+    description: "The path to the gas report to diff against. If empty it will not diff, but just pretty print the report."
+    required: false
+
+  REPORT_PATH:
+    description: "The path to the gas report."
+    required: true
+
+runs:
+  using: "node20"
+  main: dist/action.js
