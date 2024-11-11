@@ -9,6 +9,10 @@ inputs:
     description: "The path to the gas report."
     required: true
 
+outputs:
+  gas-report:
+    description: "The html gas report"
+
 runs:
   using: "node20"
   main: dist/action.js
