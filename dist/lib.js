@@ -48,7 +48,10 @@ function getHtmlGasReport(before, after, options = {}) {
     if (options.ignoreUnchanged && contractBefore && JSON.stringify(item) === JSON.stringify(contractBefore))
       return;
     const [path, name] = item.contract.split(":");
-    content += `### [${name}](${options.rootUrl}${path}) [gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}, size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}]
+    content += `### [${name}](${options.rootUrl}${path})
+
+- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}
+-size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}
 
 `;
     if (options.ignoreUnchanged && contractBefore && JSON.stringify(item.functions) === JSON.stringify(contractBefore.functions))
