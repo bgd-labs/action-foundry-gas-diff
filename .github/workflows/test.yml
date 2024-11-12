@@ -19,7 +19,29 @@ jobs:
         run: npm test -- --run
 
       - name: test action
+        id: gas
         uses: ./
         with:
           ROOT_REPORT_PATH: "mocks/gas.backup.json"
           REPORT_PATH: "mocks/gas.json"
+
+      - name: Prepare comment
+        run: |
+          printf ":fuelpump: **Gas report**\n\n" > /tmp/template.md
+          printf "${{ steps.gas.outputs.gas-report }}" >> /tmp/template.md
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@v3
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: "github-actions[bot]"
+          body-includes: ":fuelpump: Gas report"
+
+      - name: Create or update comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body-path: /tmp/template.md
+          edit-mode: replace
