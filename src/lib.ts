@@ -60,17 +60,40 @@ export function getHtmlGasReport(
   after: GasSnapshot,
   options: Options = {},
 ) {
+  // report accumulator
   let content = "";
   after.map((item) => {
-    const contract = findContract(item.contract, before);
+    const contractBefore = findContract(item.contract, before);
+    if (
+      options.ignoreUnchanged &&
+      contractBefore &&
+      JSON.stringify(item) === JSON.stringify(contractBefore)
+    )
+      return;
     const [path, name] = item.contract.split(":");
-    content += `### [${name}](${options.rootUrl}${path}) [gas: ${formatValue(contract?.deployment.gas, item.deployment.gas)}, size: ${formatValue(contract?.deployment.size, item.deployment.size)}]\n\n`;
-    let rows = `| Method | min | mean | median | max | calls |\n| --- | ---: | ---: | ---: | ---: | ---: |\n`;
-    Object.entries(item.functions).map(([method, values]) => {
-      const before = contract && findFunction(method, contract.functions);
-      rows += `${method} | ${formatValue(before?.min, values.min)} | ${formatValue(before?.mean, values.mean)} | ${formatValue(before?.median, values.median)} | ${formatValue(before?.max, values.max)} | ${formatValue(before?.calls, values.calls)} |\n`;
-    });
-    content += rows;
+    content += `### [${name}](${options.rootUrl}${path}) [gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}, size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}]\n\n`;
+    if (
+      options.ignoreUnchanged &&
+      contractBefore &&
+      JSON.stringify(item.functions) ===
+        JSON.stringify(contractBefore.functions)
+    )
+      return;
+    else {
+      let rows = `| Method | min | mean | median | max | calls |\n| --- | ---: | ---: | ---: | ---: | ---: |\n`;
+      Object.entries(item.functions).map(([method, values]) => {
+        const before =
+          contractBefore && findFunction(method, contractBefore.functions);
+        if (
+          options.ignoreUnchanged &&
+          before &&
+          JSON.stringify(before) === JSON.stringify(values)
+        )
+          return;
+        rows += `${method} | ${formatValue(before?.min, values.min)} | ${formatValue(before?.mean, values.mean)} | ${formatValue(before?.median, values.median)} | ${formatValue(before?.max, values.max)} | ${formatValue(before?.calls, values.calls)} |\n`;
+      });
+      content += rows;
+    }
     content += "\n\n";
   });
   return content;

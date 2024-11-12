@@ -55,6 +55,19 @@ whoShouldReceiveFunds() | 2566 | 2566 | 2566 | 2566 | 1 |
 "
 `;
 
+exports[`lib > should generate a well formatted report with existing root & skip unchanged 1`] = `
+"### [Create3Factory](https://github.com/src/contracts/create3/Create3Factory.sol) [gas: 224263, size: 1151]
+
+| Method | min | mean | median | max | calls |
+| --- | ---: | ---: | ---: | ---: | ---: |
+create(bytes32,bytes) | <sup title="296388">↓-3.4%</sup>286388 | 296666 | 287062 | <sup title="297068">↑34%</sup>397068 | 6 |
+
+
+### [TransparentProxyFactory](https://github.com/src/contracts/transparent-proxy/TransparentProxyFactory.sol) [gas: 1609662, size: <sup title="7244">↑14%</sup>8244]
+
+"
+`;
+
 exports[`lib > should generate a well formatted report with existing root 1`] = `
 "### [Create3Factory](https://github.com/src/contracts/create3/Create3Factory.sol) [gas: 224263, size: 1151]
 

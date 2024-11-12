@@ -18,4 +18,12 @@ describe("lib", () => {
       }),
     ).toMatchSnapshot();
   });
+  it("should generate a well formatted report with existing root & skip unchanged", () => {
+    expect(
+      getHtmlGasReport(gasRoot as any, gas as any, {
+        rootUrl: "https://github.com/",
+        ignoreUnchanged: true,
+      }),
+    ).toMatchSnapshot();
+  });
 });

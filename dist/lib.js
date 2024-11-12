@@ -44,20 +44,28 @@ function formatValue(before, after) {
 function getHtmlGasReport(before, after, options = {}) {
   let content = "";
   after.map((item) => {
-    const contract = findContract(item.contract, before);
+    const contractBefore = findContract(item.contract, before);
+    if (options.ignoreUnchanged && contractBefore && JSON.stringify(item) === JSON.stringify(contractBefore))
+      return;
     const [path, name] = item.contract.split(":");
-    content += `### [${name}](${options.rootUrl}${path}) [gas: ${formatValue(contract?.deployment.gas, item.deployment.gas)}, size: ${formatValue(contract?.deployment.size, item.deployment.size)}]
+    content += `### [${name}](${options.rootUrl}${path}) [gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}, size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}]
 
 `;
-    let rows = `| Method | min | mean | median | max | calls |
+    if (options.ignoreUnchanged && contractBefore && JSON.stringify(item.functions) === JSON.stringify(contractBefore.functions))
+      return;
+    else {
+      let rows = `| Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
 `;
-    Object.entries(item.functions).map(([method, values]) => {
-      const before2 = contract && findFunction(method, contract.functions);
-      rows += `${method} | ${formatValue(before2?.min, values.min)} | ${formatValue(before2?.mean, values.mean)} | ${formatValue(before2?.median, values.median)} | ${formatValue(before2?.max, values.max)} | ${formatValue(before2?.calls, values.calls)} |
+      Object.entries(item.functions).map(([method, values]) => {
+        const before2 = contractBefore && findFunction(method, contractBefore.functions);
+        if (options.ignoreUnchanged && before2 && JSON.stringify(before2) === JSON.stringify(values))
+          return;
+        rows += `${method} | ${formatValue(before2?.min, values.min)} | ${formatValue(before2?.mean, values.mean)} | ${formatValue(before2?.median, values.median)} | ${formatValue(before2?.max, values.max)} | ${formatValue(before2?.calls, values.calls)} |
 `;
-    });
-    content += rows;
+      });
+      content += rows;
+    }
     content += "\n\n";
   });
   return content;
