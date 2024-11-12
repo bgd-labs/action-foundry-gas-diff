@@ -24026,7 +24026,14 @@ var table = getHtmlGasReport(rootContent, currentContent, {
   rootUrl: `${import_github.context.payload.repository?.html_url}/blob/${import_github.context.sha}/`,
   ignoreUnchanged: (0, import_core.getInput)("ignoreUnchanged") === "true"
 });
-(0, import_core.setOutput)("gas-report", table);
+(0, import_core.setOutput)(
+  "gas-report",
+  `<details><summary>:fuelpump: <strong>Gas report</strong></summary>
+
+${table}
+
+</details>`
+);
 /*! Bundled license information:
 
 undici/lib/fetch/body.js:

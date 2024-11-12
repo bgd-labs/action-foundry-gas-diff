@@ -19,4 +19,7 @@ const table = getHtmlGasReport(rootContent, currentContent, {
   ignoreUnchanged: getInput("ignoreUnchanged") === "true",
 });
 
-setOutput("gas-report", table);
+setOutput(
+  "gas-report",
+  `<details><summary>:fuelpump: <strong>Gas report</strong></summary>\n\n${table}\n\n</details>`,
+);
