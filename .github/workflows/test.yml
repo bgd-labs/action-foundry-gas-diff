@@ -28,7 +28,7 @@ jobs:
       - name: Prepare comment
         run: |
           printf ":fuelpump: **Gas report**\n\n" > /tmp/template.md
-          printf "${{ steps.gas.outputs.gas-report }}" >> /tmp/template.md
+          printf '%s' "${{ steps.gas.outputs.gas-report }}" >> /tmp/template.md
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3
