@@ -71,6 +71,7 @@ export function getHtmlGasReport(
       rows += `${method} | ${formatValue(before?.min, values.min)} | ${formatValue(before?.mean, values.mean)} | ${formatValue(before?.median, values.median)} | ${formatValue(before?.max, values.max)} | ${formatValue(before?.calls, values.calls)} |\n`;
     });
     content += rows;
+    content += "\n\n";
   });
   return content;
 }

@@ -58,6 +58,7 @@ function getHtmlGasReport(before, after, options = {}) {
 `;
     });
     content += rows;
+    content += "\n\n";
   });
   return content;
 }

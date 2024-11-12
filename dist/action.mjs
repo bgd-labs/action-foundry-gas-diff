@@ -24003,6 +24003,7 @@ function getHtmlGasReport(before, after, options = {}) {
 `;
     });
     content += rows;
+    content += "\n\n";
   });
   return content;
 }
@@ -24016,7 +24017,7 @@ if (!currentExists) throw new Error("gas report not found");
 var rootContent = rootExists ? JSON.parse(readFileSync(root, "utf8")) : [];
 var currentContent = JSON.parse(readFileSync(current, "utf8"));
 var table = getHtmlGasReport(rootContent, currentContent, {
-  rootUrl: `${import_github.context.payload.repository?.html_url}/blob/${import_github.context.payload.head_commit}/`,
+  rootUrl: `${import_github.context.payload.repository?.html_url}/blob/${import_github.context.sha}/`,
   ignoreUnchanged: (0, import_core.getInput)("ignoreUnchanged") === "true"
 });
 (0, import_core.setOutput)("gas-report", table);

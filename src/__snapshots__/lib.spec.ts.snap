@@ -7,11 +7,15 @@ exports[`lib > should generate a well formatted report with empty root 1`] = `
 | --- | ---: | ---: | ---: | ---: | ---: |
 create(bytes32,bytes) | 286388 | 296666 | 287062 | 397068 | 6 |
 predictAddress(address,bytes32) | 1024 | 1024 | 1024 | 1024 | 6 |
+
+
 ### [ProxyAdmin](https://github.com/src/contracts/transparent-proxy/ProxyAdmin.sol) [gas: 0, size: 0]
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
 owner() | 386 | 386 | 386 | 386 | 6 |
+
+
 ### [TransparentProxyFactory](https://github.com/src/contracts/transparent-proxy/TransparentProxyFactory.sol) [gas: 1609662, size: 8244]
 
 | Method | min | mean | median | max | calls |
@@ -20,11 +24,15 @@ createDeterministic(address,address,bytes,bytes32) | 574115 | 534507 | 574589 | 
 createDeterministicProxyAdmin(address,bytes32) | 421268 | 421658 | 421850 | 421856 | 6 |
 predictCreateDeterministic(address,address,bytes,bytes32) | 12057 | 12057 | 12057 | 12057 | 6 |
 predictCreateDeterministicProxyAdmin(bytes32) | 6236 | 6236 | 6236 | 6236 | 6 |
+
+
 ### [TransparentUpgradeableProxy](https://github.com/src/contracts/transparent-proxy/TransparentUpgradeableProxy.sol) [gas: 0, size: 0]
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
 getFoo() | 1042 | 1042 | 1042 | 1042 | 6 |
+
+
 ### [ImplOwnableWithGuardian](https://github.com/test/OwnableWithGuardian.t.sol) [gas: 285211, size: 1067]
 
 | Method | min | mean | median | max | calls |
@@ -32,6 +40,8 @@ getFoo() | 1042 | 1042 | 1042 | 1042 | 6 |
 guardian() | 2286 | 2286 | 2286 | 2286 | 1 |
 owner() | 2341 | 2341 | 2341 | 2341 | 1 |
 updateGuardian(address) | 25944 | 28245 | 28283 | 30394 | 6 |
+
+
 ### [TestPermissionlessRescuable](https://github.com/test/PermissionlessRescuable.t.sol) [gas: 879072, size: 4033]
 
 | Method | min | mean | median | max | calls |
@@ -40,6 +50,8 @@ emergencyEtherTransfer(uint256) | 59057 | 59900 | 59900 | 60743 | 2 |
 emergencyTokenTransfer(address,uint256) | 34213 | 50627 | 51185 | 65925 | 4 |
 receive() | 0 | 0 | 0 | 0 | 1 |
 whoShouldReceiveFunds() | 2566 | 2566 | 2566 | 2566 | 1 |
+
+
 "
 `;
 
@@ -50,11 +62,15 @@ exports[`lib > should generate a well formatted report with existing root 1`] = 
 | --- | ---: | ---: | ---: | ---: | ---: |
 create(bytes32,bytes) | <sup title="296388">↓-3.4%</sup>286388 | 296666 | 287062 | <sup title="297068">↑34%</sup>397068 | 6 |
 predictAddress(address,bytes32) | 1024 | 1024 | 1024 | 1024 | 6 |
+
+
 ### [ProxyAdmin](https://github.com/src/contracts/transparent-proxy/ProxyAdmin.sol) [gas: 0, size: 0]
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
 owner() | 386 | 386 | 386 | 386 | 6 |
+
+
 ### [TransparentProxyFactory](https://github.com/src/contracts/transparent-proxy/TransparentProxyFactory.sol) [gas: 1609662, size: <sup title="7244">↑14%</sup>8244]
 
 | Method | min | mean | median | max | calls |
@@ -63,11 +79,15 @@ createDeterministic(address,address,bytes,bytes32) | 574115 | 534507 | 574589 | 
 createDeterministicProxyAdmin(address,bytes32) | 421268 | 421658 | 421850 | 421856 | 6 |
 predictCreateDeterministic(address,address,bytes,bytes32) | 12057 | 12057 | 12057 | 12057 | 6 |
 predictCreateDeterministicProxyAdmin(bytes32) | 6236 | 6236 | 6236 | 6236 | 6 |
+
+
 ### [TransparentUpgradeableProxy](https://github.com/src/contracts/transparent-proxy/TransparentUpgradeableProxy.sol) [gas: 0, size: 0]
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
 getFoo() | 1042 | 1042 | 1042 | 1042 | 6 |
+
+
 ### [ImplOwnableWithGuardian](https://github.com/test/OwnableWithGuardian.t.sol) [gas: 285211, size: 1067]
 
 | Method | min | mean | median | max | calls |
@@ -75,6 +95,8 @@ getFoo() | 1042 | 1042 | 1042 | 1042 | 6 |
 guardian() | 2286 | 2286 | 2286 | 2286 | 1 |
 owner() | 2341 | 2341 | 2341 | 2341 | 1 |
 updateGuardian(address) | 25944 | 28245 | 28283 | 30394 | 6 |
+
+
 ### [TestPermissionlessRescuable](https://github.com/test/PermissionlessRescuable.t.sol) [gas: 879072, size: 4033]
 
 | Method | min | mean | median | max | calls |
@@ -83,5 +105,7 @@ emergencyEtherTransfer(uint256) | 59057 | 59900 | 59900 | 60743 | 2 |
 emergencyTokenTransfer(address,uint256) | 34213 | 50627 | 51185 | 65925 | 4 |
 receive() | 0 | 0 | 0 | 0 | 1 |
 whoShouldReceiveFunds() | 2566 | 2566 | 2566 | 2566 | 1 |
+
+
 "
 `;

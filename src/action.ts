@@ -15,7 +15,7 @@ const rootContent = rootExists ? JSON.parse(readFileSync(root, "utf8")) : [];
 const currentContent = JSON.parse(readFileSync(current, "utf8"));
 
 const table = getHtmlGasReport(rootContent, currentContent, {
-  rootUrl: `${context.payload.repository?.html_url}/blob/${context.payload.head_commit}/`,
+  rootUrl: `${context.payload.repository?.html_url}/blob/${context.sha}/`,
   ignoreUnchanged: getInput("ignoreUnchanged") === "true",
 });
 
