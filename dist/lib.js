@@ -51,7 +51,7 @@ function getHtmlGasReport(before, after, options = {}) {
     content += `### [${name}](${options.rootUrl}${path})
 
 - gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}
--size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}
+- size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}
 
 `;
     if (options.ignoreUnchanged && contractBefore && JSON.stringify(item.functions) === JSON.stringify(contractBefore.functions))

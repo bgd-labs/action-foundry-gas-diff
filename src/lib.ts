@@ -71,7 +71,7 @@ export function getHtmlGasReport(
     )
       return;
     const [path, name] = item.contract.split(":");
-    content += `### [${name}](${options.rootUrl}${path})\n\n- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}\n-size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}\n\n`;
+    content += `### [${name}](${options.rootUrl}${path})\n\n- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}\n- size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}\n\n`;
     if (
       options.ignoreUnchanged &&
       contractBefore &&
