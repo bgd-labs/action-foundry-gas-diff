@@ -12,6 +12,11 @@ type GasSnapshot = {
   functions: Record<string, FunctionSnapshot>;
 }[];
 
+type Options = {
+  rootUrl?: string;
+  ignoreUnchanged?: boolean;
+};
+
 const UP = `↑`;
 const DOWN = `↓`;
 
@@ -50,44 +55,46 @@ function formatValue(before: number | undefined, after: number) {
   ).format(diff)}%</sup>${after}`;
 }
 
-export function getHtmlGasReport(before: GasSnapshot, after: GasSnapshot) {
-  let table = `<table>`;
+export function getHtmlGasReport(
+  before: GasSnapshot,
+  after: GasSnapshot,
+  options: Options = {},
+) {
+  // report accumulator
+  let content = "";
   after.map((item) => {
-    const contract = findContract(item.contract, before);
-    const ctr = `<strong title="${item.contract}">${item.contract.match(/:(.*)$/)?.[1]}</strong>`;
-    let row = `
-      <tr>
-        <th colspan="4">Contract</th>
-        <th>gas</th>
-        <th>size</th>
-      </tr>
-      <tr>
-        <td colspan="4">${ctr}</td>
-        <td>${formatValue(contract?.deployment.gas, item.deployment.gas)}</td>
-        <td>${formatValue(contract?.deployment.size, item.deployment.size)}</td>
-      </tr>
-      <tr>
-        <th>Method</th>
-        <th>min</th>
-        <th>mean</th>
-        <th>median</th>
-        <th>max</th>
-        <th>calls</th>
-      </tr>`;
-    Object.entries(item.functions).map(([method, values]) => {
-      const before = contract && findFunction(method, contract.functions);
-      row += `
-      <tr>
-        <td>${method}</td>
-        <td>${formatValue(before?.min, values.min)}</td>
-        <td>${formatValue(before?.mean, values.mean)}</td>
-        <td>${formatValue(before?.median, values.median)}</td>
-        <td>${formatValue(before?.max, values.max)}</td>
-        <td>${formatValue(before?.calls, values.calls)}</td>
-      </tr>`;
-    });
-    table += row;
+    const contractBefore = findContract(item.contract, before);
+    if (
+      options.ignoreUnchanged &&
+      contractBefore &&
+      JSON.stringify(item) === JSON.stringify(contractBefore)
+    )
+      return;
+    const [path, name] = item.contract.split(":");
+    content += `### [${name}](${options.rootUrl}${path})\n\n- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}\n- size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}\n\n`;
+    if (
+      options.ignoreUnchanged &&
+      contractBefore &&
+      JSON.stringify(item.functions) ===
+        JSON.stringify(contractBefore.functions)
+    )
+      return;
+    else {
+      let rows = `| Method | min | mean | median | max | calls |\n| --- | ---: | ---: | ---: | ---: | ---: |\n`;
+      Object.entries(item.functions).map(([method, values]) => {
+        const before =
+          contractBefore && findFunction(method, contractBefore.functions);
+        if (
+          options.ignoreUnchanged &&
+          before &&
+          JSON.stringify(before) === JSON.stringify(values)
+        )
+          return;
+        rows += `${method} | ${formatValue(before?.min, values.min)} | ${formatValue(before?.mean, values.mean)} | ${formatValue(before?.median, values.median)} | ${formatValue(before?.max, values.max)} | ${formatValue(before?.calls, values.calls)} |\n`;
+      });
+      content += rows;
+    }
+    content += "\n\n";
   });
-  table += `</table>`;
-  return table;
+  return content;
 }

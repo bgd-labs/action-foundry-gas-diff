@@ -17,46 +17,37 @@ function formatValue(before, after) {
     }
   ).format(diff)}%</sup>${after}`;
 }
-function getHtmlGasReport(before, after) {
-  let table = `<table>`;
+function getHtmlGasReport(before, after, options = {}) {
+  let content = "";
   after.map((item) => {
-    const contract = findContract(item.contract, before);
-    const ctr = `<strong title="${item.contract}">${item.contract.match(/:(.*)$/)?.[1]}</strong>`;
-    let row = `
-      <tr>
-        <th colspan="4">Contract</th>
-        <th>gas</th>
-        <th>size</th>
-      </tr>
-      <tr>
-        <td colspan="4">${ctr}</td>
-        <td>${formatValue(contract?.deployment.gas, item.deployment.gas)}</td>
-        <td>${formatValue(contract?.deployment.size, item.deployment.size)}</td>
-      </tr>
-      <tr>
-        <th>Method</th>
-        <th>min</th>
-        <th>mean</th>
-        <th>median</th>
-        <th>max</th>
-        <th>calls</th>
-      </tr>`;
-    Object.entries(item.functions).map(([method, values]) => {
-      const before2 = contract && findFunction(method, contract.functions);
-      row += `
-      <tr>
-        <td>${method}</td>
-        <td>${formatValue(before2?.min, values.min)}</td>
-        <td>${formatValue(before2?.mean, values.mean)}</td>
-        <td>${formatValue(before2?.median, values.median)}</td>
-        <td>${formatValue(before2?.max, values.max)}</td>
-        <td>${formatValue(before2?.calls, values.calls)}</td>
-      </tr>`;
-    });
-    table += row;
+    const contractBefore = findContract(item.contract, before);
+    if (options.ignoreUnchanged && contractBefore && JSON.stringify(item) === JSON.stringify(contractBefore))
+      return;
+    const [path, name] = item.contract.split(":");
+    content += `### [${name}](${options.rootUrl}${path})
+
+- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}
+- size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}
+
+`;
+    if (options.ignoreUnchanged && contractBefore && JSON.stringify(item.functions) === JSON.stringify(contractBefore.functions))
+      return;
+    else {
+      let rows = `| Method | min | mean | median | max | calls |
+| --- | ---: | ---: | ---: | ---: | ---: |
+`;
+      Object.entries(item.functions).map(([method, values]) => {
+        const before2 = contractBefore && findFunction(method, contractBefore.functions);
+        if (options.ignoreUnchanged && before2 && JSON.stringify(before2) === JSON.stringify(values))
+          return;
+        rows += `${method} | ${formatValue(before2?.min, values.min)} | ${formatValue(before2?.mean, values.mean)} | ${formatValue(before2?.median, values.median)} | ${formatValue(before2?.max, values.max)} | ${formatValue(before2?.calls, values.calls)} |
+`;
+      });
+      content += rows;
+    }
+    content += "\n\n";
   });
-  table += `</table>`;
-  return table;
+  return content;
 }
 export {
   getHtmlGasReport
