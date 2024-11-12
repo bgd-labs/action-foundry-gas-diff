@@ -24028,7 +24028,7 @@ var table = getHtmlGasReport(rootContent, currentContent, {
 });
 (0, import_core.setOutput)(
   "gas-report",
-  `<details><summary>:fuelpump: **Gas report**</summary>
+  `<details><summary>:fuelpump: <strong>Gas report</strong></summary>
 
 ${table}
 
