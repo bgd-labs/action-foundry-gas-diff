@@ -24011,7 +24011,7 @@ if (!currentExists) throw new Error("gas report not found");
 var rootContent = rootExists ? JSON.parse((0, import_fs.readFileSync)(root, "utf8")) : [];
 var currentContent = JSON.parse((0, import_fs.readFileSync)(current, "utf8"));
 var table = getHtmlGasReport(rootContent, currentContent, {
-  rootUrl: `https://github.com/${import_github.context.payload.repository}/blog/${import_github.context.payload.sha}`,
+  rootUrl: `${import_github.context.payload.repository?.html_url}/blob/${import_github.context.payload.head_commit}/`,
   ignoreUnchanged: (0, import_core.getInput)("ignoreUnchanged") === "true"
 });
 (0, import_core.setOutput)("gas-report", table);
