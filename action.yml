@@ -4,10 +4,13 @@ inputs:
   ROOT_REPORT_PATH:
     description: "The path to the gas report to diff against. If empty it will not diff, but just pretty print the report."
     required: false
-
   REPORT_PATH:
     description: "The path to the gas report."
     required: true
+  ignoreUnchanged:
+    description: "If true, the diff will ignore unchanged items."
+    required: false
+    default: "false"
 
 outputs:
   gas-report:

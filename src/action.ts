@@ -1,5 +1,6 @@
 import { readFileSync, existsSync } from "fs";
 import { getInput, setOutput } from "@actions/core";
+import { context } from "@actions/github";
 import { getHtmlGasReport } from "./lib";
 
 const root = getInput("ROOT_REPORT_PATH");
@@ -13,6 +14,9 @@ if (!currentExists) throw new Error("gas report not found");
 const rootContent = rootExists ? JSON.parse(readFileSync(root, "utf8")) : [];
 const currentContent = JSON.parse(readFileSync(current, "utf8"));
 
-const table = getHtmlGasReport(rootContent, currentContent);
+const table = getHtmlGasReport(rootContent, currentContent, {
+  rootUrl: `https://github.com/${context.payload.repository}/blog/${context.payload.sha}`,
+  ignoreUnchanged: getInput("ignoreUnchanged") === "true",
+});
 
 setOutput("gas-report", table);

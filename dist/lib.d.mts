@@ -13,6 +13,10 @@ type GasSnapshot = {
     };
     functions: Record<string, FunctionSnapshot>;
 }[];
-declare function getHtmlGasReport(before: GasSnapshot, after: GasSnapshot): string;
+type Options = {
+    rootUrl?: string;
+    ignoreUnchanged?: boolean;
+};
+declare function getHtmlGasReport(before: GasSnapshot, after: GasSnapshot, options?: Options): string;
 
 export { getHtmlGasReport };

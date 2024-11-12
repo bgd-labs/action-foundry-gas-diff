@@ -12,6 +12,11 @@ type GasSnapshot = {
   functions: Record<string, FunctionSnapshot>;
 }[];
 
+type Options = {
+  rootUrl?: string;
+  ignoreUnchanged?: boolean;
+};
+
 const UP = `↑`;
 const DOWN = `↓`;
 
@@ -50,44 +55,22 @@ function formatValue(before: number | undefined, after: number) {
   ).format(diff)}%</sup>${after}`;
 }
 
-export function getHtmlGasReport(before: GasSnapshot, after: GasSnapshot) {
-  let table = `<table>`;
+export function getHtmlGasReport(
+  before: GasSnapshot,
+  after: GasSnapshot,
+  options: Options = {},
+) {
+  let content = "";
   after.map((item) => {
     const contract = findContract(item.contract, before);
-    const ctr = `<strong title="${item.contract}">${item.contract.match(/:(.*)$/)?.[1]}</strong>`;
-    let row = `
-      <tr>
-        <th colspan="4">Contract</th>
-        <th>gas</th>
-        <th>size</th>
-      </tr>
-      <tr>
-        <td colspan="4">${ctr}</td>
-        <td>${formatValue(contract?.deployment.gas, item.deployment.gas)}</td>
-        <td>${formatValue(contract?.deployment.size, item.deployment.size)}</td>
-      </tr>
-      <tr>
-        <th>Method</th>
-        <th>min</th>
-        <th>mean</th>
-        <th>median</th>
-        <th>max</th>
-        <th>calls</th>
-      </tr>`;
+    const [path, name] = item.contract.split(":");
+    content += `### [${name}](${options.rootUrl}${path}) [gas: ${formatValue(contract?.deployment.gas, item.deployment.gas)}, size: ${formatValue(contract?.deployment.size, item.deployment.size)}]\n\n`;
+    let rows = `| Method | min | mean | median | max | calls |\n| --- | ---: | ---: | ---: | ---: | ---: |\n`;
     Object.entries(item.functions).map(([method, values]) => {
       const before = contract && findFunction(method, contract.functions);
-      row += `
-      <tr>
-        <td>${method}</td>
-        <td>${formatValue(before?.min, values.min)}</td>
-        <td>${formatValue(before?.mean, values.mean)}</td>
-        <td>${formatValue(before?.median, values.median)}</td>
-        <td>${formatValue(before?.max, values.max)}</td>
-        <td>${formatValue(before?.calls, values.calls)}</td>
-      </tr>`;
+      rows += `${method} | ${formatValue(before?.min, values.min)} | ${formatValue(before?.mean, values.mean)} | ${formatValue(before?.median, values.median)} | ${formatValue(before?.max, values.max)} | ${formatValue(before?.calls, values.calls)} |\n`;
     });
-    table += row;
+    content += rows;
   });
-  table += `</table>`;
-  return table;
+  return content;
 }

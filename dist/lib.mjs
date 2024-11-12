@@ -17,46 +17,25 @@ function formatValue(before, after) {
     }
   ).format(diff)}%</sup>${after}`;
 }
-function getHtmlGasReport(before, after) {
-  let table = `<table>`;
+function getHtmlGasReport(before, after, options = {}) {
+  let content = "";
   after.map((item) => {
     const contract = findContract(item.contract, before);
-    const ctr = `<strong title="${item.contract}">${item.contract.match(/:(.*)$/)?.[1]}</strong>`;
-    let row = `
-      <tr>
-        <th colspan="4">Contract</th>
-        <th>gas</th>
-        <th>size</th>
-      </tr>
-      <tr>
-        <td colspan="4">${ctr}</td>
-        <td>${formatValue(contract?.deployment.gas, item.deployment.gas)}</td>
-        <td>${formatValue(contract?.deployment.size, item.deployment.size)}</td>
-      </tr>
-      <tr>
-        <th>Method</th>
-        <th>min</th>
-        <th>mean</th>
-        <th>median</th>
-        <th>max</th>
-        <th>calls</th>
-      </tr>`;
+    const [path, name] = item.contract.split(":");
+    content += `### [${name}](${options.rootUrl}${path}) [gas: ${formatValue(contract?.deployment.gas, item.deployment.gas)}, size: ${formatValue(contract?.deployment.size, item.deployment.size)}]
+
+`;
+    let rows = `| Method | min | mean | median | max | calls |
+| --- | ---: | ---: | ---: | ---: | ---: |
+`;
     Object.entries(item.functions).map(([method, values]) => {
       const before2 = contract && findFunction(method, contract.functions);
-      row += `
-      <tr>
-        <td>${method}</td>
-        <td>${formatValue(before2?.min, values.min)}</td>
-        <td>${formatValue(before2?.mean, values.mean)}</td>
-        <td>${formatValue(before2?.median, values.median)}</td>
-        <td>${formatValue(before2?.max, values.max)}</td>
-        <td>${formatValue(before2?.calls, values.calls)}</td>
-      </tr>`;
+      rows += `${method} | ${formatValue(before2?.min, values.min)} | ${formatValue(before2?.mean, values.mean)} | ${formatValue(before2?.median, values.median)} | ${formatValue(before2?.max, values.max)} | ${formatValue(before2?.calls, values.calls)} |
+`;
     });
-    table += row;
+    content += rows;
   });
-  table += `</table>`;
-  return table;
+  return content;
 }
 export {
   getHtmlGasReport
