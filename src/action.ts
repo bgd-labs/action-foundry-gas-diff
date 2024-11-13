@@ -20,6 +20,6 @@ const table = getHtmlGasReport(rootContent, currentContent, {
 });
 
 setOutput(
-  "gas-report",
+  "report",
   `<details><summary>:fuelpump: <strong>Gas report</strong></summary>\n\n${table}\n\n</details>`,
 );

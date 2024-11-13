@@ -13,7 +13,7 @@ inputs:
     default: "false"
 
 outputs:
-  gas-report:
+  report:
     description: "The html gas report"
 
 runs:

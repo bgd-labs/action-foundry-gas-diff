@@ -24032,7 +24032,7 @@ var table = getHtmlGasReport(rootContent, currentContent, {
   ignoreUnchanged: (0, import_core.getInput)("ignoreUnchanged") === "true"
 });
 (0, import_core.setOutput)(
-  "gas-report",
+  "report",
   `<details><summary>:fuelpump: <strong>Gas report</strong></summary>
 
 ${table}
