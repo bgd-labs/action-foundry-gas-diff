@@ -55,6 +55,10 @@ function formatValue(before: number | undefined, after: number) {
   ).format(diff)}%</sup>${after}`;
 }
 
+function shouldBeSkipped(name: string) {
+  return /[mM]ock/.test(name);
+}
+
 export function getHtmlGasReport(
   before: GasSnapshot,
   after: GasSnapshot,
@@ -71,7 +75,12 @@ export function getHtmlGasReport(
     )
       return;
     const [path, name] = item.contract.split(":");
-    content += `### [${name}](${options.rootUrl}${path})\n\n- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}\n- size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}\n\n`;
+    if (shouldBeSkipped(name)) return;
+    content += `### [${name}](${options.rootUrl}${path})\n\n`;
+    content += `- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}\n`;
+    // Commented out because it's not used atm.
+    // Not exactly sure if "gas" is helpful for anything.
+    // content += `- size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}\n\n`
     if (
       options.ignoreUnchanged &&
       contractBefore &&
