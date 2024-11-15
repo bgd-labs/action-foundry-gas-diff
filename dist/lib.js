@@ -41,9 +41,6 @@ function formatValue(before, after) {
     }
   ).format(diff)}%</sup>${after}`;
 }
-function shouldBeSkipped(name) {
-  return /[mM]ock/.test(name);
-}
 function getHtmlGasReport(before, after, options = {}) {
   let content = "";
   after.map((item) => {
@@ -51,11 +48,11 @@ function getHtmlGasReport(before, after, options = {}) {
     if (options.ignoreUnchanged && contractBefore && JSON.stringify(item) === JSON.stringify(contractBefore))
       return;
     const [path, name] = item.contract.split(":");
-    if (shouldBeSkipped(name)) return;
     content += `### [${name}](${options.rootUrl}${path})
 
 `;
-    content += `- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}
+    content += `- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)} / 49152
+
 `;
     if (options.ignoreUnchanged && contractBefore && JSON.stringify(item.functions) === JSON.stringify(contractBefore.functions))
       return;
