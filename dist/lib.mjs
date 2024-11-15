@@ -27,7 +27,7 @@ function getHtmlGasReport(before, after, options = {}) {
     content += `### [${name}](${options.rootUrl}${path})
 
 `;
-    content += `- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)} / 49152
+    content += `- size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)} / 49152
 
 `;
     if (options.ignoreUnchanged && contractBefore && JSON.stringify(item.functions) === JSON.stringify(contractBefore.functions))

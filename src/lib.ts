@@ -73,10 +73,10 @@ export function getHtmlGasReport(
     const [path, name] = item.contract.split(":");
     content += `### [${name}](${options.rootUrl}${path})\n\n`;
     // limit 49152
-    content += `- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)} / 49152\n\n`;
+    content += `- size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)} / 49152\n\n`;
     // Commented out because it's not used atm.
     // Not exactly sure if "gas" is helpful for anything.
-    // content += `- size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)}\n\n`
+    // content += `- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}\n\n`
     if (
       options.ignoreUnchanged &&
       contractBefore &&

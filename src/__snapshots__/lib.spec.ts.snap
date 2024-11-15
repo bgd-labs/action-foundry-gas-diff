@@ -3,7 +3,7 @@
 exports[`lib > should generate a well formatted report with empty root 1`] = `
 "### [Create3Factory](https://github.com/src/contracts/create3/Create3Factory.sol)
 
-- gas: 224263 / 49152
+- size: 1151 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -13,7 +13,7 @@ predictAddress(address,bytes32) | 1024 | 1024 | 1024 | 1024 | 6 |
 
 ### [ProxyAdmin](https://github.com/src/contracts/transparent-proxy/ProxyAdmin.sol)
 
-- gas: 0 / 49152
+- size: 0 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -22,7 +22,7 @@ owner() | 386 | 386 | 386 | 386 | 6 |
 
 ### [TransparentProxyFactory](https://github.com/src/contracts/transparent-proxy/TransparentProxyFactory.sol)
 
-- gas: 1609662 / 49152
+- size: 8244 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -34,7 +34,7 @@ predictCreateDeterministicProxyAdmin(bytes32) | 6236 | 6236 | 6236 | 6236 | 6 |
 
 ### [TransparentUpgradeableProxy](https://github.com/src/contracts/transparent-proxy/TransparentUpgradeableProxy.sol)
 
-- gas: 0 / 49152
+- size: 0 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -43,7 +43,7 @@ getFoo() | 1042 | 1042 | 1042 | 1042 | 6 |
 
 ### [ImplOwnableWithGuardian](https://github.com/test/OwnableWithGuardian.t.sol)
 
-- gas: 285211 / 49152
+- size: 1067 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -54,7 +54,7 @@ updateGuardian(address) | 25944 | 28245 | 28283 | 30394 | 6 |
 
 ### [TestPermissionlessRescuable](https://github.com/test/PermissionlessRescuable.t.sol)
 
-- gas: 879072 / 49152
+- size: 4033 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -70,7 +70,7 @@ whoShouldReceiveFunds() | 2566 | 2566 | 2566 | 2566 | 1 |
 exports[`lib > should generate a well formatted report with existing root & skip unchanged 1`] = `
 "### [Create3Factory](https://github.com/src/contracts/create3/Create3Factory.sol)
 
-- gas: 224263 / 49152
+- size: 1151 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -79,7 +79,7 @@ create(bytes32,bytes) | <sup title="296388">↓-3.4%</sup>286388 | 296666 | 2870
 
 ### [TransparentProxyFactory](https://github.com/src/contracts/transparent-proxy/TransparentProxyFactory.sol)
 
-- gas: 1609662 / 49152
+- size: <sup title="7244">↑14%</sup>8244 / 49152
 
 "
 `;
@@ -87,7 +87,7 @@ create(bytes32,bytes) | <sup title="296388">↓-3.4%</sup>286388 | 296666 | 2870
 exports[`lib > should generate a well formatted report with existing root 1`] = `
 "### [Create3Factory](https://github.com/src/contracts/create3/Create3Factory.sol)
 
-- gas: 224263 / 49152
+- size: 1151 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -97,7 +97,7 @@ predictAddress(address,bytes32) | 1024 | 1024 | 1024 | 1024 | 6 |
 
 ### [ProxyAdmin](https://github.com/src/contracts/transparent-proxy/ProxyAdmin.sol)
 
-- gas: 0 / 49152
+- size: 0 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -106,7 +106,7 @@ owner() | 386 | 386 | 386 | 386 | 6 |
 
 ### [TransparentProxyFactory](https://github.com/src/contracts/transparent-proxy/TransparentProxyFactory.sol)
 
-- gas: 1609662 / 49152
+- size: <sup title="7244">↑14%</sup>8244 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -118,7 +118,7 @@ predictCreateDeterministicProxyAdmin(bytes32) | 6236 | 6236 | 6236 | 6236 | 6 |
 
 ### [TransparentUpgradeableProxy](https://github.com/src/contracts/transparent-proxy/TransparentUpgradeableProxy.sol)
 
-- gas: 0 / 49152
+- size: 0 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -127,7 +127,7 @@ getFoo() | 1042 | 1042 | 1042 | 1042 | 6 |
 
 ### [ImplOwnableWithGuardian](https://github.com/test/OwnableWithGuardian.t.sol)
 
-- gas: 285211 / 49152
+- size: 1067 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
@@ -138,7 +138,7 @@ updateGuardian(address) | 25944 | 28245 | 28283 | 30394 | 6 |
 
 ### [TestPermissionlessRescuable](https://github.com/test/PermissionlessRescuable.t.sol)
 
-- gas: 879072 / 49152
+- size: 4033 / 49152
 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
