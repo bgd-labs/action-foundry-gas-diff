@@ -23974,6 +23974,7 @@ function findFunction(fn, snapshot) {
 function formatValue(before, after) {
   if (!before || after === before) return after;
   const diff = (after - before) / Math.abs(before) * 100;
+  if (Math.abs(diff) < 0.1) return after;
   return `<sup title="${before}">${diff > 0 ? UP : DOWN}${new Intl.NumberFormat(
     "en-US",
     {

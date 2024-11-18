@@ -8,7 +8,7 @@ exports[`lib > should generate a well formatted report with empty root 1`] = `
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
 create(bytes32,bytes) | 286388 | 296666 | 287062 | 397068 | 6 |
-predictAddress(address,bytes32) | 1024 | 1024 | 1024 | 1024 | 6 |
+predictAddress(address,bytes32) | 1024 | 1024 | 1024 | 1025 | 6 |
 
 
 ### [ProxyAdmin](https://github.com/src/contracts/transparent-proxy/ProxyAdmin.sol)
@@ -75,6 +75,7 @@ exports[`lib > should generate a well formatted report with existing root & skip
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
 create(bytes32,bytes) | <sup title="296388">↓-3.4%</sup>286388 | 296666 | 287062 | <sup title="297068">↑34%</sup>397068 | 6 |
+predictAddress(address,bytes32) | 1024 | 1024 | 1024 | 1025 | 6 |
 
 
 ### [TransparentProxyFactory](https://github.com/src/contracts/transparent-proxy/TransparentProxyFactory.sol)
@@ -92,7 +93,7 @@ exports[`lib > should generate a well formatted report with existing root 1`] = 
 | Method | min | mean | median | max | calls |
 | --- | ---: | ---: | ---: | ---: | ---: |
 create(bytes32,bytes) | <sup title="296388">↓-3.4%</sup>286388 | 296666 | 287062 | <sup title="297068">↑34%</sup>397068 | 6 |
-predictAddress(address,bytes32) | 1024 | 1024 | 1024 | 1024 | 6 |
+predictAddress(address,bytes32) | 1024 | 1024 | 1024 | 1025 | 6 |
 
 
 ### [ProxyAdmin](https://github.com/src/contracts/transparent-proxy/ProxyAdmin.sol)

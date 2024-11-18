@@ -47,6 +47,8 @@ function findFunction(
 function formatValue(before: number | undefined, after: number) {
   if (!before || after === before) return after;
   const diff = ((after - before) / Math.abs(before)) * 100;
+  // if diff is below threshold, showing the diff is more noise than signal
+  if (Math.abs(diff) < 0.1) return after;
   return `<sup title="${before}">${diff > 0 ? UP : DOWN}${new Intl.NumberFormat(
     "en-US",
     {
