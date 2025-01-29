@@ -7,12 +7,16 @@ inputs:
     default: "Gas report"
   token:
     description: "The GitHub token to use for the API requests."
-    required: true
+    required: false
+    default: ${{ github.token }}
   files:
     description: "The files that should be compared. A glob is accepted."
     required: false
     default: |
       snapshots/*.json
+  base_ref:
+    description: "The ref to compare against. Uses the base ref of the pull request if not provided."
+    required: false
 
 outputs:
   report:

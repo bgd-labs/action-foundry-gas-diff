@@ -8,12 +8,12 @@ import path from "node:path";
 const heading = getInput("heading");
 const octokit = getOctokit(getInput("token"));
 
-const getBaseFile = async (path: string) => {
+const getBaseFile = async (path: string, ref: string) => {
   const { data } = await octokit.rest.repos.getContent({
     repo: context.repo.repo,
     owner: context.repo.owner,
     path,
-    ref: context.payload.pull_request?.base.ref,
+    ref,
   }).catch(e => {
     return e.response as {
       status: number
@@ -23,7 +23,6 @@ const getBaseFile = async (path: string) => {
       };
     };
   })
-  debug(`Base file ${path}: ${JSON.stringify(data)}`);
 
   if (!data || !("content" in data)) {
     return {};
@@ -35,8 +34,10 @@ const getBaseFile = async (path: string) => {
 
 const run = async () => {
   debug("Starting run");
-  if (!("pull_request" in context.payload)) {
-    throw new Error("This action can only be run on pull_request events");
+  const base_ref = getInput("base_ref") === "" ? undefined : getInput("base_ref");
+  const ref = context.payload.pull_request?.base.ref;
+  if (!base_ref && !ref) {
+    throw new Error("No 'base_ref' provided and not a pull request");
   }
   const results: Parameters<typeof formatDiffMd>[1] = [];
   const globber = await createGlob(getInput("files"));
@@ -46,7 +47,7 @@ const run = async () => {
   for (const filePath of files) {
     const relativePath = path.relative(process.cwd(), filePath);
     debug(`Comparing ${relativePath}`);
-    const before = await getBaseFile(relativePath);
+    const before = await getBaseFile(relativePath, base_ref ?? ref);
     const after = JSON.parse(await readFile(filePath, "utf8"));
     const diff = snapshotDiff({
       before,
