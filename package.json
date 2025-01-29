@@ -3,27 +3,11 @@
   "version": "1.0.0",
   "description": "Creates a gas diff between two gas outputs",
   "files": [
-    "src/lib.ts",
-    "dist/lib.d.mts",
-    "dist/lib.d.ts",
-    "dist/lib.js",
-    "dist/lib.mjs"
+    "dist/action.d.ts",
+    "dist/action.js"
   ],
-  "main": "./dist/lib.js",
-  "module": "./dist/lib.mjs",
-  "types": "./dist/lib.d.ts",
-  "exports": {
-    ".": {
-      "require": {
-        "types": "./dist/lib.d.mts",
-        "default": "./dist/lib.js"
-      },
-      "import": {
-        "types": "./dist/lib.d.mts",
-        "default": "./dist/lib.mjs"
-      }
-    }
-  },
+  "main": "./dist/action.js",
+  "types": "./dist/action.d.ts",
   "scripts": {
     "build": "tsup",
     "test": "vitest"
@@ -47,6 +31,7 @@
     "sourcemap": false,
     "clean": true,
     "dts": true,
+    "minify": true,
     "format": [
       "cjs"
     ]

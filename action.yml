@@ -1,5 +1,5 @@
 name: "foundry-gas-report"
-description: "Generates a report about differences between two JSON files."
+description: "Generates a report about differences between versions of JSON files in a pull request."
 inputs:
   heading: 
     description: "The heading to use for the report."
