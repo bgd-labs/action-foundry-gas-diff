@@ -25967,23 +25967,25 @@ var import_node_path = __toESM(require("path"));
 var heading = (0, import_core.getInput)("heading");
 var octokit = (0, import_github.getOctokit)((0, import_core.getInput)("token"));
 var getBaseFile = async (path2) => {
-  console.log(import_github.context.payload);
   const { data } = await octokit.rest.repos.getContent({
     repo: import_github.context.repo.repo,
     owner: import_github.context.repo.owner,
     path: path2,
-    ref: import_github.context.actor
+    ref: import_github.context.payload.pull_request?.base.ref
   }).catch((e) => {
-    (0, import_core.debug)(`Error getting base file: ${e}`);
     return e.response;
   });
+  (0, import_core.debug)(`Base file ${path2}: ${JSON.stringify(data)}`);
   if (!data || !("content" in data)) {
     return {};
   }
-  return JSON.parse(data.content);
+  return JSON.parse(atob(data.content));
 };
 var run = async () => {
   (0, import_core.debug)("Starting run");
+  if (!("pull_request" in import_github.context.payload)) {
+    throw new Error("This action can only be run on pull_request events");
+  }
   const results = [];
   const globber = await (0, import_glob.create)((0, import_core.getInput)("files"));
   const files = await globber.glob();
@@ -25991,7 +25993,7 @@ var run = async () => {
   for (const filePath of files) {
     const relativePath = import_node_path.default.relative(process.cwd(), filePath);
     (0, import_core.debug)(`Comparing ${relativePath}`);
-    const before = await getBaseFile(filePath);
+    const before = await getBaseFile(relativePath);
     const after = JSON.parse(await (0, import_promises.readFile)(filePath, "utf8"));
     const diff = snapshotDiff({
       before,
