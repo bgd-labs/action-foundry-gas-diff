@@ -18,7 +18,6 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           heading: "Gas report"
-          baseBranch: "main"
           files: |
             mocks/*.json
 

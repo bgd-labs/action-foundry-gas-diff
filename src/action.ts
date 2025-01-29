@@ -5,17 +5,16 @@ import { create as createGlob } from "@actions/glob";
 import { formatDiffMd, snapshotDiff } from "./lib";
 import path from "node:path";
 
-const baseBranch = getInput("baseBranch");
 const heading = getInput("heading");
 const octokit = getOctokit(getInput("token"));
-debug(`Base branch: ${baseBranch}`);
 
 const getBaseFile = async (path: string) => {
+  console.log(context.payload)
   const { data } = await octokit.rest.repos.getContent({
     repo: context.repo.repo,
     owner: context.repo.owner,
     path,
-    ref: baseBranch,
+    ref: context.actor,
   }).catch(e => {
     debug(`Error getting base file: ${e}`);
     return e.response as {

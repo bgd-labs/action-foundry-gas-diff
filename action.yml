@@ -13,10 +13,6 @@ inputs:
     required: false
     default: |
       snapshots/*.json
-  baseBranch:
-    description: "The base branch to compare against."
-    required: false
-    default: "main"
 
 outputs:
   report:

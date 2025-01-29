@@ -25964,16 +25964,15 @@ var formatDiffMd = (heading2, input) => {
 
 // src/action.ts
 var import_node_path = __toESM(require("path"));
-var baseBranch = (0, import_core.getInput)("baseBranch");
 var heading = (0, import_core.getInput)("heading");
 var octokit = (0, import_github.getOctokit)((0, import_core.getInput)("token"));
-(0, import_core.debug)(`Base branch: ${baseBranch}`);
 var getBaseFile = async (path2) => {
+  console.log(import_github.context.payload);
   const { data } = await octokit.rest.repos.getContent({
     repo: import_github.context.repo.repo,
     owner: import_github.context.repo.owner,
     path: path2,
-    ref: baseBranch
+    ref: import_github.context.actor
   }).catch((e) => {
     (0, import_core.debug)(`Error getting base file: ${e}`);
     return e.response;
