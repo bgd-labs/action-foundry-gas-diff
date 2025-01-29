@@ -1,107 +1,135 @@
-type FunctionSnapshot = {
-  calls: number;
-  min: number;
-  mean: number;
-  median: number;
-  max: number;
+type Snapshot = Record<string, string>;
+
+const numberFormat = new Intl.NumberFormat("en-US");
+
+const formatNumber = (value: string) => {
+  return numberFormat.format(Number(value));
 };
 
-type GasSnapshot = {
-  contract: string;
-  deployment: { gas: number; size: number };
-  functions: Record<string, FunctionSnapshot>;
-}[];
+export function snapshotDiff({
+  before,
+  after,
+}: {
+  before: Snapshot;
+  after: Snapshot;
+}) {
+  const removed: Snapshot = {};
+  const added: Snapshot = {};
+  const changed: Snapshot = {};
+  const unchanged: Snapshot = {};
 
-type Options = {
-  rootUrl?: string;
-  ignoreUnchanged?: boolean;
-};
+  const beforeKeys = Object.keys(before);
+  const afterKeys = Object.keys(after);
 
-const UP = `↑`;
-const DOWN = `↓`;
+  const beforeNotNumbers = beforeKeys.filter((key) =>
+    Number.isNaN(Number(before[key])),
+  );
+  const afterNotNumbers = afterKeys.filter((key) =>
+    Number.isNaN(Number(after[key])),
+  );
 
-function findContract(
-  contract: string,
-  snapshot: {
-    contract: string;
-    deployment: { gas: number; size: number };
-    functions: Record<
-      string,
-      { calls: number; min: number; mean: number; median: number; max: number }
-    >;
-  }[],
-) {
-  return snapshot.find((item) => item.contract === contract);
-}
+  if (beforeNotNumbers.length > 0) {
+    throw new Error(
+      `The following keys in before are not numbers: ${beforeNotNumbers.join(", ")}`,
+    );
+  }
 
-function findFunction(
-  fn: string,
-  snapshot: Record<
-    string,
-    { calls: number; min: number; mean: number; median: number; max: number }
-  >,
-) {
-  return snapshot[fn];
-}
+  if (afterNotNumbers.length > 0) {
+    throw new Error(
+      `The following keys in after are not numbers: ${afterNotNumbers.join(", ")}`,
+    );
+  }
 
-function formatValue(before: number | undefined, after: number) {
-  if (!before || after === before) return after;
-  const diff = ((after - before) / Math.abs(before)) * 100;
-  // if diff is below threshold, showing the diff is more noise than signal
-  if (Math.abs(diff) < 0.1) return after;
-  return `<sup title="${before}">${diff > 0 ? UP : DOWN}${new Intl.NumberFormat(
-    "en-US",
-    {
-      maximumSignificantDigits: 2,
-    },
-  ).format(diff)}%</sup>${after}`;
-}
+  for (const _key of beforeKeys) {
+    const key = _key;
+    const before_value = before[_key];
+    const after_value = after[_key];
 
-export function getHtmlGasReport(
-  before: GasSnapshot,
-  after: GasSnapshot,
-  options: Options = {},
-) {
-  // report accumulator
-  let content = "";
-  after.map((item) => {
-    const contractBefore = findContract(item.contract, before);
-    if (
-      options.ignoreUnchanged &&
-      contractBefore &&
-      JSON.stringify(item) === JSON.stringify(contractBefore)
-    )
-      return;
-    const [path, name] = item.contract.split(":");
-    content += `### [${name}](${options.rootUrl}${path})\n\n`;
-    // limit 49152
-    content += `- size: ${formatValue(contractBefore?.deployment.size, item.deployment.size)} / 49152\n\n`;
-    // Commented out because it's not used atm.
-    // Not exactly sure if "gas" is helpful for anything.
-    // content += `- gas: ${formatValue(contractBefore?.deployment.gas, item.deployment.gas)}\n\n`
-    if (
-      options.ignoreUnchanged &&
-      contractBefore &&
-      JSON.stringify(item.functions) ===
-        JSON.stringify(contractBefore.functions)
-    )
-      return;
-    else {
-      let rows = `| Method | min | mean | median | max | calls |\n| --- | ---: | ---: | ---: | ---: | ---: |\n`;
-      Object.entries(item.functions).map(([method, values]) => {
-        const before =
-          contractBefore && findFunction(method, contractBefore.functions);
-        if (
-          options.ignoreUnchanged &&
-          before &&
-          JSON.stringify(before) === JSON.stringify(values)
-        )
-          return;
-        rows += `${method} | ${formatValue(before?.min, values.min)} | ${formatValue(before?.mean, values.mean)} | ${formatValue(before?.median, values.median)} | ${formatValue(before?.max, values.max)} | ${formatValue(before?.calls, values.calls)} |\n`;
-      });
-      content += rows;
+    if (!after_value) {
+      removed[key] = formatNumber(before_value);
+    } else if (before_value !== after_value) {
+      const diff = Math.abs(Number(before_value) - Number(after_value));
+      const diffPercentage = Math.round((diff / Number(before_value)) * 100);
+      const diffSym = Number(before_value) < Number(after_value) ? "↑" : "↓";
+      const diffSign = Number(before_value) < Number(after_value) ? "+" : "-";
+      changed[key] =
+        `<sup>${diffSym}${diffPercentage}% (${diffSign}${diff})</sup> ${formatNumber(after_value)}`;
+    } else {
+      unchanged[key] = formatNumber(before_value);
     }
-    content += "\n\n";
-  });
-  return content;
+  }
+
+  for (const _key of afterKeys) {
+    const key = _key;
+    const before_value = before[_key];
+    const after_value = after[_key];
+
+    if (!before_value) {
+      added[key] = after_value;
+    }
+  }
+
+  return {
+    removed,
+    added,
+    changed,
+    unchanged,
+  };
 }
+
+export const formatDiffMd = (
+  heading: string,
+  input: { path: string; diff: ReturnType<typeof snapshotDiff> }[],
+) => {
+  const th = "| Path | Value |";
+  const hr = "| --- | ---: |";
+  const br = "";
+
+  const changedLinesHeader: string[] = [`### ♻️ ${heading}`, th, hr];
+  let changedLines: string[] = [];
+  const unchangedLinesHeader: string[] = [
+    br,
+    "<details><summary>🔕 Unchanged</summary>",
+    br,
+    th,
+    hr,
+  ];
+  let unchangedLines: string[] = [];
+
+  const formatLine = (key: string, value: string) => `| ${key} | ${value} |`;
+  const formatGroup = (values: [string, string][]) => {
+    return values.map(([key, value]) => formatLine(`${key}`, `${value}`));
+  };
+
+  for (const { path, diff } of input) {
+    const changed = diff.changed;
+    const added = diff.added;
+    const removed = diff.removed;
+    const unchanged = diff.unchanged;
+
+    const sumChanged =
+      Object.keys(changed).length +
+      Object.keys(added).length +
+      Object.keys(removed).length;
+    if (sumChanged > 0) {
+      changedLines.push(formatLine(`**${path}**`, ""));
+      changedLines.push(...formatGroup(Object.entries(changed)));
+      changedLines.push(...formatGroup(Object.entries(removed)));
+      changedLines.push(...formatGroup(Object.entries(added)));
+    }
+
+    if (Object.keys(unchanged).length > 0) {
+      unchangedLines.push(formatLine(`**${path}**`, ""));
+      unchangedLines.push(...formatGroup(Object.entries(unchanged)));
+    }
+  }
+
+  if (changedLines.length > 0) {
+    changedLines = [...changedLinesHeader, ...changedLines, "</details>"];
+  }
+  if (unchangedLines.length > 0) {
+    unchangedLines = [...unchangedLinesHeader, ...unchangedLines, "</details>"];
+  }
+
+  return changedLines.concat(unchangedLines).join("\n");
+};

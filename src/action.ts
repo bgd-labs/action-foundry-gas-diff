@@ -1,25 +1,67 @@
-import { readFileSync, existsSync } from "fs";
-import { getInput, setOutput } from "@actions/core";
-import { context } from "@actions/github";
-import { getHtmlGasReport } from "./lib";
+import { readFile } from "node:fs/promises";
+import { debug, getInput, setOutput } from "@actions/core";
+import { context, getOctokit } from "@actions/github";
+import { create as createGlob } from "@actions/glob";
+import { formatDiffMd, snapshotDiff } from "./lib";
+import path from "node:path";
 
-const root = getInput("ROOT_REPORT_PATH");
-const current = getInput("REPORT_PATH");
+const baseBranch = getInput("baseBranch");
+const heading = getInput("heading");
+const octokit = getOctokit(getInput("token"));
+debug(`Base branch: ${baseBranch}`);
 
-const rootExists = root && existsSync(root);
-const currentExists = current && existsSync(current);
+const getBaseFile = async (path: string) => {
+  const { data } = await octokit.rest.repos.getContent({
+    repo: context.repo.repo,
+    owner: context.repo.owner,
+    path,
+    ref: baseBranch,
+  }).catch(e => {
+    debug(`Error getting base file: ${e}`);
+    return e.response as {
+      status: number
+      data: {
+        message: string;
+        status: number;
+      };
+    };
+  })
 
-if (!currentExists) throw new Error("gas report not found");
+  if (!data || !("content" in data)) {
+    return {};
+  }
 
-const rootContent = rootExists ? JSON.parse(readFileSync(root, "utf8")) : [];
-const currentContent = JSON.parse(readFileSync(current, "utf8"));
+  return JSON.parse(data.content);
+};
 
-const table = getHtmlGasReport(rootContent, currentContent, {
-  rootUrl: `${context.payload.repository?.html_url}/blob/${context.sha}/`,
-  ignoreUnchanged: getInput("ignoreUnchanged") === "true",
-});
 
-setOutput(
-  "report",
-  `<details><summary>:fuelpump: <strong>Gas report</strong></summary>\n\n${table}\n\n</details>`,
-);
+const run = async () => {
+  debug("Starting run");
+  const results: Parameters<typeof formatDiffMd>[1] = [];
+  const globber = await createGlob(getInput("files"));
+  const files = await globber.glob();
+  debug(`Files to compare: ${files.join(", ")}`);
+
+  for (const filePath of files) {
+    const relativePath = path.relative(process.cwd(), filePath);
+    debug(`Comparing ${relativePath}`);
+    const before = await getBaseFile(filePath);
+    const after = JSON.parse(await readFile(filePath, "utf8"));
+    const diff = snapshotDiff({
+      before,
+      after,
+    });
+    results.push({
+      path: relativePath,
+      diff,
+    });
+  }
+
+  debug(`Results: ${JSON.stringify(results)}`);
+  const report = formatDiffMd(heading, results);
+  debug(`Report: ${report}`);
+
+  setOutput("report", report);
+}
+
+run()
