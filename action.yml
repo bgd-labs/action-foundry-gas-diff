@@ -1,20 +1,26 @@
 name: "foundry-gas-report"
-description: "Generates a html gas report diffing two json gas-report files"
+description: "Generates a report about differences between two JSON files."
 inputs:
-  ROOT_REPORT_PATH:
-    description: "The path to the gas report to diff against. If empty it will not diff, but just pretty print the report."
+  heading: 
+    description: "The heading to use for the report."
     required: false
-  REPORT_PATH:
-    description: "The path to the gas report."
-    required: true
-  ignoreUnchanged:
-    description: "If true, the diff will ignore unchanged items."
+    default: "Gas report"
+  token:
+    description: "The GitHub token to use for the API requests."
     required: false
-    default: "false"
+    default: ${{ github.token }}
+  files:
+    description: "The files that should be compared. A glob is accepted."
+    required: false
+    default: |
+      snapshots/*.json
+  base_ref:
+    description: "The ref to compare against. Uses the base ref of the pull request if not provided."
+    required: false
 
 outputs:
   report:
-    description: "The html gas report"
+    description: "The report"
 
 runs:
   using: "node20"

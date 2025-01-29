@@ -33,6 +33,7 @@
   "devDependencies": {
     "@actions/core": "^1.11.1",
     "@actions/github": "^6.0.0",
+    "@actions/glob": "^0.5.0",
     "@types/node": "^22.9.0",
     "tsup": "^8.3.5",
     "typescript": "^5.6.3",
@@ -40,15 +41,13 @@
   },
   "tsup": {
     "entry": [
-      "src/action.ts",
-      "src/lib.ts"
+      "src/action.ts"
     ],
     "splitting": false,
     "sourcemap": false,
     "clean": true,
     "dts": true,
     "format": [
-      "esm",
       "cjs"
     ]
   }

@@ -12,22 +12,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # pin@v4.2.2
-
-      - uses: bgd-labs/github-workflows/.github/actions/setup-node@main
-
-      - name: test lib
-        run: npm test -- --run
-
       - name: test action
         id: gas
         uses: ./
         with:
-          ROOT_REPORT_PATH: "mocks/gas.backup.json"
-          REPORT_PATH: "mocks/gas.json"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          heading: "Gas report"
+          files: |
+            mocks/*.json
 
       - name: Prepare comment
         run: |
-          printf '%s' "${{ steps.gas.outputs.gas-report }}" > /tmp/template.md
+          printf '%s' "${{ steps.gas.outputs.report }}<!-- gas-report -->" > /tmp/template.md
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3
@@ -35,7 +31,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: "github-actions[bot]"
-          body-includes: "Gas report"
+          body-includes: <!-- gas-report -->
 
       - name: Create or update comment
         uses: peter-evans/create-or-update-comment@v4
