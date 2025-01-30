@@ -37,7 +37,7 @@ const run = async () => {
   const base_ref = getInput("base_ref") === "" ? undefined : getInput("base_ref");
   const ref = context.payload.pull_request?.base.ref;
   if (!base_ref && !ref) {
-    throw new Error("No 'base_ref' provided and not a pull request");
+    console.log("No 'base_ref' provided and not a pull request. Skipping.");
   }
   const results: Parameters<typeof formatDiffMd>[1] = [];
   const globber = await createGlob(getInput("files"));
