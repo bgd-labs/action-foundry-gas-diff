@@ -1,5 +1,5 @@
 {
-    "full amount; receiver: ->enableCollateral": "144837",
+    "full amount; receiver: ->enableCollateral": "143837",
     "full amount; sender: ->disableCollateral;": "103274",
     "full amount; sender: ->disableCollateral; receiver: ->enableCollateral": "145016",
     "full amount; sender: ->disableCollateral; receiver: dirty, ->enableCollateral": "133059",
