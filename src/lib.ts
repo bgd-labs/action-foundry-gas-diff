@@ -114,8 +114,8 @@ export const formatDiffMd = (
     if (sumChanged > 0) {
       changedLines.push(formatLine(`**${path}**`, ""));
       changedLines.push(...formatGroup(Object.entries(changed)));
-      changedLines.push(...formatGroup(Object.entries(removed)));
-      changedLines.push(...formatGroup(Object.entries(added)));
+      changedLines.push(...formatGroup(Object.entries(removed).map(([key, value]) => [`~~${key}~~`, `~~${value}~~`])));
+      changedLines.push(...formatGroup(Object.entries(added).map(([key, value]) => [`_${key}_`, `_${value}_`])));
     }
 
     if (Object.keys(unchanged).length > 0) {
