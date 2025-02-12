@@ -4,7 +4,7 @@ inputs:
   heading: 
     description: "The heading to use for the report."
     required: false
-    default: "Gas report"
+    default: "Forge Gas Snapshots"
   token:
     description: "The GitHub token to use for the API requests."
     required: false

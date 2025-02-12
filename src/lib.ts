@@ -85,7 +85,7 @@ export const formatDiffMd = (
   const hr = "| --- | ---: |";
   const br = "";
 
-  const changedLinesHeader: string[] = [`### ♻️ ${heading}`, th, hr];
+  const changedLinesHeader: string[] = [th, hr];
   let changedLines: string[] = [];
   const unchangedLinesHeader: string[] = [
     br,
@@ -131,5 +131,10 @@ export const formatDiffMd = (
     unchangedLines = [...unchangedLinesHeader, ...unchangedLines, "</details>"];
   }
 
-  return changedLines.concat(unchangedLines).join("\n");
+  let lines = changedLines.concat(unchangedLines)
+  if (lines.length === 0) {
+    lines = ["Seems like you are not measuring gas of any operations yet. 🤔", "Consider adding some [snapshot tests](https://book.getfoundry.sh/forge/gas-section-snapshots?highlight=snapshot#snapshotgas-cheatcodes) to measure regressions & improvements."];
+  }
+
+  return [`### ♻️ ${heading}`, ...lines].join("\n");
 };
