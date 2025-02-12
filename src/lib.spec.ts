@@ -85,13 +85,14 @@ describe("lib", () => {
       | **path_a** |  |
       | test_bigger | <sup>↑41% (+322)</sup> 1,111 |
       | test_smaller | <sup>↓17% (-135)</sup> 654 |
-      | test_removed | 123 |
-      | test_added | 789 |
+      | ~~test_removed~~ | 123 |
+      | __test_added__ | 789 |
       | **path_b** |  |
       | test_bigger | <sup>↑41% (+322)</sup> 1,111 |
       | test_smaller | <sup>↓17% (-135)</sup> 654 |
-      | test_removed | 123 |
-      | test_added | 789 |
+      | ~~test_removed~~ | 123 |
+      | __test_added__ | 789 |
+      </details>
 
       <details><summary>🔕 Unchanged</summary>
 
