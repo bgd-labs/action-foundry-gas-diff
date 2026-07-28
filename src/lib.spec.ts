@@ -105,4 +105,39 @@ describe("lib", () => {
       </details>"
     `)
   })
+
+  it("strips surrounding whitespace of keys", () => {
+    const diff = snapshotDiff({
+      before: {
+        "test_removed   ": "98074",
+        "  test_unchanged ": "456",
+        "test_changed  ": "789",
+      },
+      after: {
+        "  test_unchanged ": "456",
+        "test_changed  ": "654",
+        "test_added   ": "145788",
+      },
+    })
+
+    const result = formatDiffMd("Abcdef", [{ path: "path_a", diff }])
+    expect(result).toMatchInlineSnapshot(`
+      "### ♻️ Abcdef
+      | Path | Value |
+      | --- | ---: |
+      | **path_a** |  |
+      | test_changed | <sup>↓17% (-135)</sup> 654 |
+      | ~~test_removed~~ | ~~98,074~~ |
+      | _test_added_ | _145788_ |
+      </details>
+
+      <details><summary>🔕 Unchanged</summary>
+
+      | Path | Value |
+      | --- | ---: |
+      | **path_a** |  |
+      | test_unchanged | 456 |
+      </details>"
+    `)
+  })
 });

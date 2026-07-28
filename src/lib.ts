@@ -97,8 +97,14 @@ export const formatDiffMd = (
   let unchangedLines: string[] = [];
 
   const formatLine = (key: string, value: string) => `| ${key} | ${value} |`;
-  const formatGroup = (values: [string, string][]) => {
-    return values.map(([key, value]) => formatLine(`${key}`, `${value}`));
+  // keys and values are trimmed as surrounding whitespace would break the markdown emphasis
+  const formatGroup = (
+    values: [string, string][],
+    decorate: (value: string) => string = (value) => value,
+  ) => {
+    return values.map(([key, value]) =>
+      formatLine(decorate(key.trim()), decorate(value.trim())),
+    );
   };
 
   for (const { path, diff } of input) {
@@ -114,8 +120,12 @@ export const formatDiffMd = (
     if (sumChanged > 0) {
       changedLines.push(formatLine(`**${path}**`, ""));
       changedLines.push(...formatGroup(Object.entries(changed)));
-      changedLines.push(...formatGroup(Object.entries(removed).map(([key, value]) => [`~~${key}~~`, `~~${value}~~`])));
-      changedLines.push(...formatGroup(Object.entries(added).map(([key, value]) => [`_${key}_`, `_${value}_`])));
+      changedLines.push(
+        ...formatGroup(Object.entries(removed), (value) => `~~${value}~~`),
+      );
+      changedLines.push(
+        ...formatGroup(Object.entries(added), (value) => `_${value}_`),
+      );
     }
 
     if (Object.keys(unchanged).length > 0) {
