@@ -1,9 +1,21 @@
 type Snapshot = Record<string, string>;
 
+// relative changes below this threshold are considered noise and not reported as changed
+const MIN_DIFF_PERCENTAGE = 0.1;
+
 const numberFormat = new Intl.NumberFormat("en-US");
+
+const percentageFormat = new Intl.NumberFormat("en-US", {
+  minimumFractionDigits: 1,
+  maximumFractionDigits: 1,
+});
 
 const formatNumber = (value: string) => {
   return numberFormat.format(Number(value));
+};
+
+const formatPercentage = (value: number) => {
+  return percentageFormat.format(value);
 };
 
 export function snapshotDiff({
@@ -49,11 +61,16 @@ export function snapshotDiff({
       removed[key] = formatNumber(before_value);
     } else if (before_value !== after_value) {
       const diff = Math.abs(Number(before_value) - Number(after_value));
-      const diffPercentage = Math.round((diff / Number(before_value)) * 100);
+      const diffPercentage = (diff / Number(before_value)) * 100;
+      // changes below the threshold are noise, so they are reported as unchanged
+      if (diffPercentage < MIN_DIFF_PERCENTAGE) {
+        unchanged[key] = formatNumber(after_value);
+        continue;
+      }
       const diffSym = Number(before_value) < Number(after_value) ? "↑" : "↓";
       const diffSign = Number(before_value) < Number(after_value) ? "+" : "-";
       changed[key] =
-        `<sup>${diffSym}${diffPercentage}% (${diffSign}${diff})</sup> ${formatNumber(after_value)}`;
+        `<sup>${diffSym}${formatPercentage(diffPercentage)}% (${diffSign}${diff})</sup> ${formatNumber(after_value)}`;
     } else {
       unchanged[key] = formatNumber(before_value);
     }

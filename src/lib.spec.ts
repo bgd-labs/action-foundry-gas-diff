@@ -52,8 +52,8 @@ describe("lib", () => {
           "test_added": "789",
         },
         "changed": {
-          "test_bigger": "<sup>↑41% (+322)</sup> 1,111",
-          "test_smaller": "<sup>↓17% (-135)</sup> 654",
+          "test_bigger": "<sup>↑40.8% (+322)</sup> 1,111",
+          "test_smaller": "<sup>↓17.1% (-135)</sup> 654",
         },
         "removed": {
           "test_removed": "123",
@@ -83,13 +83,13 @@ describe("lib", () => {
       | Path | Value |
       | --- | ---: |
       | **path_a** |  |
-      | test_bigger | <sup>↑41% (+322)</sup> 1,111 |
-      | test_smaller | <sup>↓17% (-135)</sup> 654 |
+      | test_bigger | <sup>↑40.8% (+322)</sup> 1,111 |
+      | test_smaller | <sup>↓17.1% (-135)</sup> 654 |
       | ~~test_removed~~ | ~~123~~ |
       | _test_added_ | _789_ |
       | **path_b** |  |
-      | test_bigger | <sup>↑41% (+322)</sup> 1,111 |
-      | test_smaller | <sup>↓17% (-135)</sup> 654 |
+      | test_bigger | <sup>↑40.8% (+322)</sup> 1,111 |
+      | test_smaller | <sup>↓17.1% (-135)</sup> 654 |
       | ~~test_removed~~ | ~~123~~ |
       | _test_added_ | _789_ |
       </details>
@@ -126,7 +126,7 @@ describe("lib", () => {
       | Path | Value |
       | --- | ---: |
       | **path_a** |  |
-      | test_changed | <sup>↓17% (-135)</sup> 654 |
+      | test_changed | <sup>↓17.1% (-135)</sup> 654 |
       | ~~test_removed~~ | ~~98,074~~ |
       | _test_added_ | _145788_ |
       </details>
@@ -138,6 +138,34 @@ describe("lib", () => {
       | **path_a** |  |
       | test_unchanged | 456 |
       </details>"
+    `)
+  })
+
+  it("reports sub 0.1% changes as unchanged", () => {
+    const diff = snapshotDiff({
+      before: {
+        "test_below_threshold": "100000",
+        "test_at_threshold": "100000",
+      },
+      after: {
+        // 0.099% -> noise
+        "test_below_threshold": "100099",
+        // 0.1% -> reported
+        "test_at_threshold": "100100",
+      },
+    })
+
+    expect(diff).toMatchInlineSnapshot(`
+      {
+        "added": {},
+        "changed": {
+          "test_at_threshold": "<sup>↑0.1% (+100)</sup> 100,100",
+        },
+        "removed": {},
+        "unchanged": {
+          "test_below_threshold": "100,099",
+        },
+      }
     `)
   })
 });
