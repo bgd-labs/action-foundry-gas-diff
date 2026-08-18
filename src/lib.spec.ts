@@ -141,17 +141,17 @@ describe("lib", () => {
     `)
   })
 
-  it("reports sub 0.1% changes as unchanged", () => {
+  it("reports sub 0.5% changes as unchanged", () => {
     const diff = snapshotDiff({
       before: {
         "test_below_threshold": "100000",
         "test_at_threshold": "100000",
       },
       after: {
-        // 0.099% -> noise
-        "test_below_threshold": "100099",
-        // 0.1% -> reported
-        "test_at_threshold": "100100",
+        // 0.499% -> noise
+        "test_below_threshold": "100499",
+        // 0.5% -> reported
+        "test_at_threshold": "100500",
       },
     })
 
@@ -159,11 +159,11 @@ describe("lib", () => {
       {
         "added": {},
         "changed": {
-          "test_at_threshold": "<sup>↑0.1% (+100)</sup> 100,100",
+          "test_at_threshold": "<sup>↑0.5% (+500)</sup> 100,500",
         },
         "removed": {},
         "unchanged": {
-          "test_below_threshold": "100,099",
+          "test_below_threshold": "100,499",
         },
       }
     `)

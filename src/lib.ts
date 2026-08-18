@@ -1,7 +1,7 @@
 type Snapshot = Record<string, string>;
 
 // relative changes below this threshold are considered noise and not reported as changed
-const MIN_DIFF_PERCENTAGE = 0.1;
+const MIN_DIFF_PERCENTAGE = 0.5;
 
 const numberFormat = new Intl.NumberFormat("en-US");
 
