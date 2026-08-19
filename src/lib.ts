@@ -15,7 +15,8 @@ const formatNumber = (value: string) => {
 };
 
 const formatPercentage = (value: number) => {
-  return percentageFormat.format(value);
+  // truncated instead of rounded, so a sub threshold change is never rendered as if it hit the threshold
+  return percentageFormat.format(Math.floor(value * 10) / 10);
 };
 
 export function snapshotDiff({
@@ -62,15 +63,16 @@ export function snapshotDiff({
     } else if (before_value !== after_value) {
       const diff = Math.abs(Number(before_value) - Number(after_value));
       const diffPercentage = (diff / Number(before_value)) * 100;
-      // changes below the threshold are noise, so they are reported as unchanged
-      if (diffPercentage < MIN_DIFF_PERCENTAGE) {
-        unchanged[key] = formatNumber(after_value);
-        continue;
-      }
       const diffSym = Number(before_value) < Number(after_value) ? "↑" : "↓";
       const diffSign = Number(before_value) < Number(after_value) ? "+" : "-";
-      changed[key] =
-        `<sup>${diffSym}${formatPercentage(diffPercentage)}% (${diffSign}${diff})</sup> ${formatNumber(after_value)}`;
+      const value = `<sup>${diffSym}${formatPercentage(diffPercentage)}% (${diffSign}${diff})</sup> ${formatNumber(after_value)}`;
+      // changes below the threshold are noise, so they are reported as unchanged,
+      // but the diff is still rendered so the actual movement stays visible
+      if (diffPercentage < MIN_DIFF_PERCENTAGE) {
+        unchanged[key] = value;
+      } else {
+        changed[key] = value;
+      }
     } else {
       unchanged[key] = formatNumber(before_value);
     }

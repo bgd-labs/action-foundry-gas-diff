@@ -4,6 +4,7 @@ import { formatDiffMd, snapshotDiff } from "./lib";
 const before = {
   "test_removed": "123",
   "test_unchanged": "456",
+  "test_noise": "100000",
   "test_bigger": "789",
   "test_smaller": "789",
 }
@@ -13,6 +14,7 @@ const after = {
   "test_bigger": "1111",
   "test_smaller": "654",
   "test_added": "789",
+  "test_noise": "100200",
 }
 
 describe("lib", () => {
@@ -59,6 +61,7 @@ describe("lib", () => {
           "test_removed": "123",
         },
         "unchanged": {
+          "test_noise": "<sup>↑0.2% (+200)</sup> 100,200",
           "test_unchanged": "456",
         },
       }
@@ -100,8 +103,10 @@ describe("lib", () => {
       | --- | ---: |
       | **path_a** |  |
       | test_unchanged | 456 |
+      | test_noise | <sup>↑0.2% (+200)</sup> 100,200 |
       | **path_b** |  |
       | test_unchanged | 456 |
+      | test_noise | <sup>↑0.2% (+200)</sup> 100,200 |
       </details>"
     `)
   })
@@ -141,7 +146,7 @@ describe("lib", () => {
     `)
   })
 
-  it("reports sub 0.5% changes as unchanged", () => {
+  it("reports sub 0.5% changes as unchanged, but keeps the diff visible", () => {
     const diff = snapshotDiff({
       before: {
         "test_below_threshold": "100000",
@@ -163,7 +168,7 @@ describe("lib", () => {
         },
         "removed": {},
         "unchanged": {
-          "test_below_threshold": "100,499",
+          "test_below_threshold": "<sup>↑0.4% (+499)</sup> 100,499",
         },
       }
     `)
